@@ -25,6 +25,8 @@ task(
     // 1. Deploy address provider and set genesis manager
     const addressesProvider = await deployLendingPoolAddressesProvider(MarketId, verify);
 
+    console.log('skipRegistry: ', skipRegistry);
+
     // 2. Add to registry or setup a new one
     if (!skipRegistry) {
       const providerRegistryAddress = getParamPerNetwork(

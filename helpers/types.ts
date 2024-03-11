@@ -4,7 +4,12 @@ export interface SymbolMap<T> {
   [symbol: string]: T;
 }
 
-export type eNetwork = eEthereumNetwork | ePolygonNetwork | eXDaiNetwork | eAvalancheNetwork;
+export type eNetwork =
+  | eEthereumNetwork
+  | ePolygonNetwork
+  | eXDaiNetwork
+  | eAvalancheNetwork
+  | eArbitrumNetwork;
 
 export enum eEthereumNetwork {
   buidlerevm = 'buidlerevm',
@@ -16,6 +21,11 @@ export enum eEthereumNetwork {
 
   tenderly = 'tenderly',
   goerli = 'goerli',
+}
+
+export enum eArbitrumNetwork {
+  arbitrum = 'arbitrum',
+  arbitrumSepolia = 'arbitrumSepolia',
 }
 
 export enum ePolygonNetwork {
@@ -330,52 +340,64 @@ export type iAvalanchePoolAssets<T> = Pick<
 
 export type iMultiPoolsAssets<T> = iAssetCommon<T> | iAavePoolAssets<T>;
 
+export type iArbitrumAavePoolAssets<T> = Pick<
+  iAssetsWithoutUSD<T>,
+  'USDT' | 'LINK' | 'WBTC' | 'WETH'
+>;
+
 export type iAavePoolTokens<T> = Omit<iAavePoolAssets<T>, 'ETH'>;
 
 export type iAssetAggregatorBase<T> = iAssetsWithoutETH<T>;
 
+export enum TokenContractIdForTesting {
+  DAI = 'DAI',
+  AAVE = 'AAVE',
+  USDC = 'USDC',
+  USDT = 'USDT',
+}
+
 export enum TokenContractId {
   DAI = 'DAI',
   AAVE = 'AAVE',
-  TUSD = 'TUSD',
-  BAT = 'BAT',
+  // TUSD = 'TUSD',
+  // BAT = 'BAT',
   WETH = 'WETH',
   USDC = 'USDC',
   USDT = 'USDT',
-  SUSD = 'SUSD',
-  ZRX = 'ZRX',
-  MKR = 'MKR',
-  WBTC = 'WBTC',
-  LINK = 'LINK',
-  KNC = 'KNC',
-  MANA = 'MANA',
-  REN = 'REN',
-  SNX = 'SNX',
-  BUSD = 'BUSD',
-  USD = 'USD',
-  YFI = 'YFI',
-  UNI = 'UNI',
-  ENJ = 'ENJ',
-  UniDAIWETH = 'UniDAIWETH',
-  UniWBTCWETH = 'UniWBTCWETH',
-  UniAAVEWETH = 'UniAAVEWETH',
-  UniBATWETH = 'UniBATWETH',
-  UniDAIUSDC = 'UniDAIUSDC',
-  UniCRVWETH = 'UniCRVWETH',
-  UniLINKWETH = 'UniLINKWETH',
-  UniMKRWETH = 'UniMKRWETH',
-  UniRENWETH = 'UniRENWETH',
-  UniSNXWETH = 'UniSNXWETH',
-  UniUNIWETH = 'UniUNIWETH',
-  UniUSDCWETH = 'UniUSDCWETH',
-  UniWBTCUSDC = 'UniWBTCUSDC',
-  UniYFIWETH = 'UniYFIWETH',
-  BptWBTCWETH = 'BptWBTCWETH',
-  BptBALWETH = 'BptBALWETH',
-  WMATIC = 'WMATIC',
-  STAKE = 'STAKE',
-  xSUSHI = 'xSUSHI',
-  WAVAX = 'WAVAX',
+  // SUSD = 'SUSD',
+  // ZRX = 'ZRX',
+  // MKR = 'MKR',
+  // WBTC = 'WBTC',
+  // LINK = 'LINK',
+  // KNC = 'KNC',
+  // MANA = 'MANA',
+  // REN = 'REN',
+  // SNX = 'SNX',
+  // BUSD = 'BUSD',
+  // USD = 'USD',
+  // YFI = 'YFI',
+  // UNI = 'UNI',
+  // ENJ = 'ENJ',
+  // UniDAIWETH = 'UniDAIWETH',
+  // UniWBTCWETH = 'UniWBTCWETH',
+  // UniAAVEWETH = 'UniAAVEWETH',
+  // UniBATWETH = 'UniBATWETH',
+  // UniDAIUSDC = 'UniDAIUSDC',
+  // UniCRVWETH = 'UniCRVWETH',
+  // UniLINKWETH = 'UniLINKWETH',
+  // UniMKRWETH = 'UniMKRWETH',
+  // UniRENWETH = 'UniRENWETH',
+  // UniSNXWETH = 'UniSNXWETH',
+  // UniUNIWETH = 'UniUNIWETH',
+  // UniUSDCWETH = 'UniUSDCWETH',
+  // UniWBTCUSDC = 'UniWBTCUSDC',
+  // UniYFIWETH = 'UniYFIWETH',
+  // BptWBTCWETH = 'BptWBTCWETH',
+  // BptBALWETH = 'BptBALWETH',
+  // WMATIC = 'WMATIC',
+  // STAKE = 'STAKE',
+  // xSUSHI = 'xSUSHI',
+  // WAVAX = 'WAVAX',
 }
 
 export interface IReserveParams extends IReserveBorrowParams, IReserveCollateralParams {
@@ -419,22 +441,33 @@ export type iParamsPerNetwork<T> =
   | iEthereumParamsPerNetwork<T>
   | iPolygonParamsPerNetwork<T>
   | iXDaiParamsPerNetwork<T>
-  | iAvalancheParamsPerNetwork<T>;
+  | iAvalancheParamsPerNetwork<T>
+  | iArbitrumParamsPerNetwork<T>;
 
 export interface iParamsPerNetworkAll<T>
   extends iEthereumParamsPerNetwork<T>,
     iPolygonParamsPerNetwork<T>,
     iXDaiParamsPerNetwork<T> {}
 
+export interface iArbitrumParamsPerNetwork<T> {
+  // [eEthereumNetwork.coverage]: T;
+  // [eEthereumNetwork.buidlerevm]: T;
+  // [eEthereumNetwork.kovan]: T;
+  // [eEthereumNetwork.ropsten]: T;
+  [eArbitrumNetwork.arbitrumSepolia]: T;
+  // [eEthereumNetwork.se]: T;
+  // [eEthereumNetwork.tenderly]: T;
+  // [eEthereumNetwork.goerli]: T;
+}
 export interface iEthereumParamsPerNetwork<T> {
-  [eEthereumNetwork.coverage]: T;
-  [eEthereumNetwork.buidlerevm]: T;
-  [eEthereumNetwork.kovan]: T;
-  [eEthereumNetwork.ropsten]: T;
+  // [eEthereumNetwork.coverage]: T;
+  // [eEthereumNetwork.buidlerevm]: T;
+  // [eEthereumNetwork.kovan]: T;
+  // [eEthereumNetwork.ropsten]: T;
   [eEthereumNetwork.main]: T;
-  [eEthereumNetwork.hardhat]: T;
-  [eEthereumNetwork.tenderly]: T;
-  [eEthereumNetwork.goerli]: T;
+  // [eEthereumNetwork.se]: T;
+  // [eEthereumNetwork.tenderly]: T;
+  // [eEthereumNetwork.goerli]: T;
 }
 
 export interface iPolygonParamsPerNetwork<T> {
@@ -533,6 +566,10 @@ export interface IBaseConfiguration {
 export interface ICommonConfiguration extends IBaseConfiguration {
   ReservesConfig: iMultiPoolsAssets<IReserveParams>;
   Mocks: IMocksConfig;
+}
+
+export interface IArbitrumConfiguration extends ICommonConfiguration {
+  ReservesConfig: iArbitrumAavePoolAssets<IReserveParams>;
 }
 
 export interface IAaveConfiguration extends ICommonConfiguration {
